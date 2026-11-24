@@ -41,10 +41,18 @@ server picks up installed and updated modules by itself.
 
 ## Requirements
 
-- macOS 14 or later.
+- macOS 14 or later on Apple Silicon.
 - Docker Desktop or OrbStack. Berth finds the `docker` command in the usual places even
   when opened from Finder.
 - Optional: `pipx install git+https://github.com/thanhphu2643/odoo-upgrade-check`.
+
+## Install
+
+Download the DMG from the [releases](https://github.com/thanhphu2643/Berth/releases/latest),
+open it, and drag **Berth** to Applications.
+
+Builds are not notarized. The first time, try to open the app, then allow it under
+**System Settings → Privacy & Security → Open Anyway**.
 
 ## Build from source
 
