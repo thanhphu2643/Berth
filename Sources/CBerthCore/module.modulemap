@@ -1,0 +1,5 @@
+module CBerthCore {
+    header "berth_core.h"
+    link "berth_core"
+    export *
+}
