@@ -31,7 +31,7 @@ switched in the settings (⌘,) without restarting.
   like "0 failed, 0 errors of 18 tests".
 - **Logs.** Follows the Odoo log, keeps each traceback with its record, and shows the
   exception on the summary line. Filter by level, hide HTTP requests, search, copy.
-- **Upgrade check.** With [odoo-upgrade-check](https://github.com/thanhphu2643/odoo-upgrade-check)
+- **Upgrade check.** With [Preflight](https://github.com/thanhphu2643/odoo-preflight)
   installed, checks a module for the next Odoo version and lists what to change, line by
   line.
 
@@ -44,7 +44,7 @@ server picks up installed and updated modules by itself.
 - macOS 14 or later on Apple Silicon.
 - Docker Desktop or OrbStack. Berth finds the `docker` command in the usual places even
   when opened from Finder.
-- Optional: `pipx install git+https://github.com/thanhphu2643/odoo-upgrade-check`.
+- Optional: `pipx install git+https://github.com/thanhphu2643/odoo-preflight`.
 
 ## Install
 

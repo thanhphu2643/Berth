@@ -135,23 +135,27 @@ fn run_odoo(job: &Job, mut command: std::process::Command, is_test: bool) -> Res
     }
 }
 
-/// odoo-upgrade-check, when it is installed (pipx install git+https://github.com/thanhphu2643/odoo-upgrade-check).
+/// Preflight, when it is installed (pipx install git+https://github.com/thanhphu2643/odoo-preflight).
+/// Its first versions were called odoo-upgrade-check.
 pub fn upgrade_checker() -> Option<PathBuf> {
-    let mut candidates: Vec<PathBuf> = Vec::new();
+    let mut folders: Vec<PathBuf> = Vec::new();
     if let Some(home) = std::env::var_os("HOME") {
-        candidates.push(PathBuf::from(home).join(".local/bin/odoo-upgrade-check"));
+        folders.push(PathBuf::from(home).join(".local/bin"));
     }
-    candidates.push("/opt/homebrew/bin/odoo-upgrade-check".into());
-    candidates.push("/usr/local/bin/odoo-upgrade-check".into());
+    folders.push("/opt/homebrew/bin".into());
+    folders.push("/usr/local/bin".into());
     if let Some(path) = std::env::var_os("PATH") {
-        candidates.extend(std::env::split_paths(&path).map(|dir| dir.join("odoo-upgrade-check")));
+        folders.extend(std::env::split_paths(&path));
     }
-    candidates.into_iter().find(|path| path.is_file())
+    ["odoo-preflight", "odoo-upgrade-check"]
+        .iter()
+        .flat_map(|name| folders.iter().map(move |folder| folder.join(name)))
+        .find(|path| path.is_file())
 }
 
-/// Checks what breaks in a module when it moves to `to`, with odoo-upgrade-check.
+/// Checks what breaks in a module when it moves to `to`, with Preflight.
 pub fn upgrade_check(path: PathBuf, from: u8, to: u8) -> Result<u64, String> {
-    let checker = upgrade_checker().ok_or("odoo-upgrade-check is not installed")?;
+    let checker = upgrade_checker().ok_or("Preflight (odoo-preflight) is not installed")?;
     if !path.join("__manifest__.py").is_file() {
         return Err(format!("{} is not an Odoo module", path.display()));
     }
@@ -165,7 +169,7 @@ pub fn upgrade_check(path: PathBuf, from: u8, to: u8) -> Result<u64, String> {
             output.push_str(line);
             output.push('\n');
         })?;
-        let report: serde_json::Value = serde_json::from_str(&output).map_err(|_| "odoo-upgrade-check did not return a report".to_string())?;
+        let report: serde_json::Value = serde_json::from_str(&output).map_err(|_| "Preflight did not return a report".to_string())?;
         let findings = report["findings"].as_array().map_or(0, Vec::len);
         job.summary(match findings {
             0 => format!("Nothing to change for Odoo {to}."),

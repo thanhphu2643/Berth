@@ -160,7 +160,7 @@ struct UpgradeReportView: View {
     private var summary: String {
         let errors = findings.filter { $0.severity == "error" }.count
         let warnings = findings.count - errors
-        return t("\(errors) errors, \(warnings) warnings · odoo-upgrade-check", "\(errors) lỗi, \(warnings) cảnh báo · odoo-upgrade-check")
+        return t("\(errors) errors, \(warnings) warnings · Preflight", "\(errors) lỗi, \(warnings) cảnh báo · Preflight")
     }
 
     private func copy(_ text: String) {
@@ -183,11 +183,11 @@ struct SettingsView: View {
             }
             Section(t("Tools", "Công cụ")) {
                 LabeledContent("Docker", value: store.tools.docker ?? t("not found", "không tìm thấy"))
-                LabeledContent("odoo-upgrade-check", value: store.tools.upgradeCheck ?? t("not installed", "chưa cài"))
+                LabeledContent("Preflight", value: store.tools.upgradeCheck ?? t("not installed", "chưa cài"))
                 if store.tools.upgradeCheck == nil {
                     Text(t("Install it to check modules for the next Odoo version:", "Cài để kiểm tra module cho phiên bản Odoo tiếp theo:"))
                         .font(.caption).foregroundStyle(.secondary)
-                    Text(verbatim: "pipx install git+https://github.com/thanhphu2643/odoo-upgrade-check")
+                    Text(verbatim: "pipx install git+https://github.com/thanhphu2643/odoo-preflight")
                         .font(.caption.monospaced()).textSelection(.enabled)
                 }
             }
